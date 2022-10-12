@@ -1,0 +1,145 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.chapshopreseller"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+9        android:targetSdkVersion="30" />
+10
+11    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+11-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/debug/AndroidManifest.xml:5:5-77
+11-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/debug/AndroidManifest.xml:5:22-75
+12    <uses-permission android:name="android.permission.INTERNET" />
+12-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/main/AndroidManifest.xml:4:5-67
+12-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/main/AndroidManifest.xml:4:22-64
+13    <uses-permission android:name="android.permission.CAMERA" />
+13-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/main/AndroidManifest.xml:5:5-64
+13-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/main/AndroidManifest.xml:5:22-62
+14
+15    <uses-feature
+15-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/main/AndroidManifest.xml:6:5-85
+16        android:name="android.hardware.camera"
+16-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/main/AndroidManifest.xml:6:19-57
+17        android:required="false" />
+17-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/main/AndroidManifest.xml:6:58-82
+18    <uses-feature
+18-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/main/AndroidManifest.xml:7:5-91
+19        android:name="android.hardware.camera.front"
+19-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/main/AndroidManifest.xml:7:19-63
+20        android:required="false" />
+20-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/main/AndroidManifest.xml:7:64-88
+21
+22    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+22-->[com.facebook.flipper:flipper:0.99.0] /Users/appsmaven/.gradle/caches/transforms-3/df7b208c45426f45016d16c0c3a6a059/transformed/jetified-flipper-0.99.0/AndroidManifest.xml:16:5-76
+22-->[com.facebook.flipper:flipper:0.99.0] /Users/appsmaven/.gradle/caches/transforms-3/df7b208c45426f45016d16c0c3a6a059/transformed/jetified-flipper-0.99.0/AndroidManifest.xml:16:22-73
+23
+24    <queries>
+24-->[:react-native-image-crop-picker] /Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/node_modules/react-native-image-crop-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-13:15
+25        <intent>
+25-->[:react-native-image-crop-picker] /Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/node_modules/react-native-image-crop-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-12:18
+26            <action android:name="android.media.action.IMAGE_CAPTURE" />
+26-->[:react-native-image-crop-picker] /Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/node_modules/react-native-image-crop-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-73
+26-->[:react-native-image-crop-picker] /Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/node_modules/react-native-image-crop-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:21-70
+27        </intent>
+28    </queries>
+29
+30    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- Required by older versions of Google Play services to create IID tokens -->
+30-->[:react-native-image-crop-picker] /Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/node_modules/react-native-image-crop-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:5-81
+30-->[:react-native-image-crop-picker] /Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/node_modules/react-native-image-crop-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:22-78
+31    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+31-->[com.google.android.gms:play-services-iid:17.0.0] /Users/appsmaven/.gradle/caches/transforms-3/e6d8a0d5c74803b1cab3752897736947/transformed/jetified-play-services-iid-17.0.0/AndroidManifest.xml:23:5-82
+31-->[com.google.android.gms:play-services-iid:17.0.0] /Users/appsmaven/.gradle/caches/transforms-3/e6d8a0d5c74803b1cab3752897736947/transformed/jetified-play-services-iid-17.0.0/AndroidManifest.xml:23:22-79
+32    <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
+32-->[com.android.installreferrer:installreferrer:1.1.2] /Users/appsmaven/.gradle/caches/transforms-3/aa8b66c6e700288f91862b6c68209a14/transformed/jetified-installreferrer-1.1.2/AndroidManifest.xml:9:5-110
+32-->[com.android.installreferrer:installreferrer:1.1.2] /Users/appsmaven/.gradle/caches/transforms-3/aa8b66c6e700288f91862b6c68209a14/transformed/jetified-installreferrer-1.1.2/AndroidManifest.xml:9:22-107
+33
+34    <application
+34-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/main/AndroidManifest.xml:10:5-28:19
+35        android:name="com.chapshopreseller.MainApplication"
+35-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/main/AndroidManifest.xml:11:7-38
+36        android:allowBackup="false"
+36-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/main/AndroidManifest.xml:15:7-34
+37        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+37-->[androidx.core:core:1.6.0] /Users/appsmaven/.gradle/caches/transforms-3/9f18c6b50baa776d71894ad120630276/transformed/core-1.6.0/AndroidManifest.xml:24:18-86
+38        android:debuggable="true"
+39        android:icon="@mipmap/ic_launcher"
+39-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/main/AndroidManifest.xml:13:7-41
+40        android:label="@string/app_name"
+40-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/main/AndroidManifest.xml:12:7-39
+41        android:roundIcon="@mipmap/ic_launcher_round"
+41-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/main/AndroidManifest.xml:14:7-52
+42        android:theme="@style/AppTheme"
+42-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/main/AndroidManifest.xml:16:7-38
+43        android:usesCleartextTraffic="true" >
+43-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/debug/AndroidManifest.xml:8:9-44
+44        <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+44-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/debug/AndroidManifest.xml:11:9-86
+44-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/debug/AndroidManifest.xml:11:19-83
+45        <activity
+45-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/main/AndroidManifest.xml:17:7-27:18
+46            android:name="com.chapshopreseller.MainActivity"
+46-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/main/AndroidManifest.xml:18:9-37
+47            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
+47-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/main/AndroidManifest.xml:20:9-86
+48            android:label="@string/app_name"
+48-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/main/AndroidManifest.xml:19:9-41
+49            android:launchMode="singleTask"
+49-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/main/AndroidManifest.xml:21:9-40
+50            android:windowSoftInputMode="adjustResize" >
+50-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/main/AndroidManifest.xml:22:9-51
+51            <intent-filter>
+51-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/main/AndroidManifest.xml:23:9-26:25
+52                <action android:name="android.intent.action.MAIN" />
+52-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/main/AndroidManifest.xml:24:13-65
+52-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/main/AndroidManifest.xml:24:21-62
+53
+54                <category android:name="android.intent.category.LAUNCHER" />
+54-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/main/AndroidManifest.xml:25:13-73
+54-->/Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/android/app/src/main/AndroidManifest.xml:25:23-70
+55            </intent-filter>
+56        </activity>
+57
+58        <provider
+58-->[:react-native-image-crop-picker] /Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/node_modules/react-native-image-crop-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:18:9-26:20
+59            android:name="androidx.core.content.FileProvider"
+59-->[:react-native-image-crop-picker] /Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/node_modules/react-native-image-crop-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:19:13-62
+60            android:authorities="com.chapshopreseller.provider"
+60-->[:react-native-image-crop-picker] /Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/node_modules/react-native-image-crop-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:20:13-60
+61            android:exported="false"
+61-->[:react-native-image-crop-picker] /Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/node_modules/react-native-image-crop-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:21:13-37
+62            android:grantUriPermissions="true" >
+62-->[:react-native-image-crop-picker] /Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/node_modules/react-native-image-crop-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:22:13-47
+63            <meta-data
+63-->[:react-native-image-crop-picker] /Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/node_modules/react-native-image-crop-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:23:13-25:58
+64                android:name="android.support.FILE_PROVIDER_PATHS"
+64-->[:react-native-image-crop-picker] /Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/node_modules/react-native-image-crop-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:24:17-67
+65                android:resource="@xml/provider_paths" />
+65-->[:react-native-image-crop-picker] /Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/node_modules/react-native-image-crop-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:25:17-55
+66        </provider>
+67
+68        <activity
+68-->[:react-native-image-crop-picker] /Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/node_modules/react-native-image-crop-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:28:9-30:72
+69            android:name="com.yalantis.ucrop.UCropActivity"
+69-->[:react-native-image-crop-picker] /Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/node_modules/react-native-image-crop-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:29:13-60
+70            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+70-->[:react-native-image-crop-picker] /Users/appsmaven/Documents/ReactNative/Project/ChapShopReseller/ChapShopReseller/node_modules/react-native-image-crop-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:30:13-69
+71        <activity
+71-->[com.google.android.gms:play-services-base:17.0.0] /Users/appsmaven/.gradle/caches/transforms-3/197aafdaca714ffb9edd95fe82ca0ad4/transformed/jetified-play-services-base-17.0.0/AndroidManifest.xml:23:9-26:75
+72            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+72-->[com.google.android.gms:play-services-base:17.0.0] /Users/appsmaven/.gradle/caches/transforms-3/197aafdaca714ffb9edd95fe82ca0ad4/transformed/jetified-play-services-base-17.0.0/AndroidManifest.xml:24:13-79
+73            android:exported="false"
+73-->[com.google.android.gms:play-services-base:17.0.0] /Users/appsmaven/.gradle/caches/transforms-3/197aafdaca714ffb9edd95fe82ca0ad4/transformed/jetified-play-services-base-17.0.0/AndroidManifest.xml:25:13-37
+74            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+74-->[com.google.android.gms:play-services-base:17.0.0] /Users/appsmaven/.gradle/caches/transforms-3/197aafdaca714ffb9edd95fe82ca0ad4/transformed/jetified-play-services-base-17.0.0/AndroidManifest.xml:26:13-72
+75
+76        <meta-data
+76-->[com.google.android.gms:play-services-basement:17.0.0] /Users/appsmaven/.gradle/caches/transforms-3/0e3d0c4f5635e0c3c0cfa0e0064e8f7e/transformed/jetified-play-services-basement-17.0.0/AndroidManifest.xml:23:9-25:69
+77            android:name="com.google.android.gms.version"
+77-->[com.google.android.gms:play-services-basement:17.0.0] /Users/appsmaven/.gradle/caches/transforms-3/0e3d0c4f5635e0c3c0cfa0e0064e8f7e/transformed/jetified-play-services-basement-17.0.0/AndroidManifest.xml:24:13-58
+78            android:value="@integer/google_play_services_version" />
+78-->[com.google.android.gms:play-services-basement:17.0.0] /Users/appsmaven/.gradle/caches/transforms-3/0e3d0c4f5635e0c3c0cfa0e0064e8f7e/transformed/jetified-play-services-basement-17.0.0/AndroidManifest.xml:25:13-66
+79    </application>
+80
+81</manifest>
