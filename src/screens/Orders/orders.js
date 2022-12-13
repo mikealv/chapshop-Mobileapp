@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { SafeAreaView, Text, View, Image, TextInput, TouchableOpacity } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { APP_FONTS, APP_IMAGES, APP_URLS } from "../../utils/Common";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -46,15 +46,15 @@ const ITEMS = [
     // category: require('../../../assets/images/product-img.png'),
     name: 'ratings'
   },
-  {
-    id: 7,
-    // category: require('../../../assets/images/product-img.png'),
-    name: 'ratings'
-  }, {
-    id: 8,
-    // category: require('../../../assets/images/product-img.png'),
-    name: 'ratings'
-  },
+  // {
+  //   id: 7,
+  //   // category: require('../../../assets/images/product-img.png'),
+  //   name: 'ratings'
+  // }, {
+  //   id: 8,
+  //   // category: require('../../../assets/images/product-img.png'),
+  //   name: 'ratings'
+  // },
   // {
   //     id: 6,
   //     // category: require('../../../assets/images/product-img.png'),
@@ -137,7 +137,8 @@ class orders extends Component {
     super(props)
     this.state = {
       token: '',
-      product: ''
+      product: '',
+      selectedValue:''
 
     }
   }
@@ -155,6 +156,13 @@ class orders extends Component {
     }, () => { this.state.token, 'token--->' })
     console.log(this.state.token, 'oojojtkt')
     this.placedOrderStatusList()
+
+  }
+
+  async selectOptions(name){
+     this.setState({
+       selectedValue:name
+     })    
 
   }
 
@@ -219,6 +227,39 @@ class orders extends Component {
     }
   }
 
+  timeSince(date) {
+
+    var seconds = Math.floor((new Date() - date) / 1000);
+
+    var interval = seconds / 31536000;
+
+    if (interval > 1) {
+        return Math.floor(interval) + " years ago";
+    }
+    interval = seconds / 2592000;
+    if (interval > 1) {
+        return Math.floor(interval) + " months ago";
+    }
+    interval = seconds / 86400;
+    if (interval > 1) {
+        return Math.floor(interval) + " days ago";
+    }
+    interval = seconds / 3600;
+    if (interval > 1) {
+        return Math.floor(interval) + " hours ago";
+    }
+    interval = seconds / 60;
+    if (interval > 1) {
+        return Math.floor(interval) + " minutes ago";
+    }
+    return Math.floor(seconds) + " seconds ago";
+}
+
+format(dateString){
+  const options = { year: "numeric", month: "long", day: "numeric"}
+  return new Date(dateString).toLocaleDateString(undefined, options)
+}
+
   render() {
     return (
       <SafeAreaView style={{ flex: 1 }}>
@@ -265,13 +306,16 @@ class orders extends Component {
             <Image source={APP_IMAGES.closedCircle} style={{ height: 12, width: 12, right: Platform.OS == 'ios' ? 24 : 10, top: 16 }} />
           </TouchableOpacity>
         </View>
-        <View style={{ flex: 0.20, top: 30 }}>
+        <View style={{ flex:0.45,flexDirection:'row', top: 30,padding:10}}>
           <FlatList
-            horizontal
+            // horizontal
             data={ITEMS}
+            
+            numColumns={3}
+
             // numColumns={2}
             // numColumns={ITEMS.length/2}
-            style={{ flex: 1 }}
+            style={{ flex: 1 ,width:wp('100%')}}
             keyExtractor={item => item.id}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
@@ -279,17 +323,17 @@ class orders extends Component {
               return (
 
                 <View style={{ padding: 15 }}>
-
-                  <View style={{ bottom: 0, backgroundColor: '#F5F5F5', height: 30, width: 80, borderRadius: 10, padding: 6 }}>
-                    {/* <TouchableOpacity onPress={() => { this.sorting(item.name) } */}
-                    {/* } > */}
-                    <Text style={{ fontSize: 12, color: '#8f8f8f', fontFamily: APP_FONTS.semi_bold, alignSelf: 'center' }}>{item.name}</Text>
-                    {/* </TouchableOpacity> */}
+                <TouchableOpacity onPress={()=>{this.selectOptions(item.name)}}>
+                  <View style={{ bottom: 0,borderColor:this.state.selectedValue == item.name?'#fe6b8e':'#fea3b9' ,backgroundColor:this.state.selectedValue == item.name?'#ffedf1':'#F5F5F5', height: 30, width: 80, borderRadius: 10, padding: 6 }}>
+                    
+                  
+                    <Text style={{ fontSize: 12, color:this.state.selectedValue == item.name? '#fe4974':'#8f8f8f', fontFamily: APP_FONTS.semi_bold, alignSelf: 'center' }}>{item.name}</Text>
+                  
                     <View style={{ flexDirection: 'row' }}>
-                      {/* <Image source={APP_IMAGES.commisionImage} style={{ height: 14, width: 14 }} /> */}
-                      {/* <Text style={{ fontSize: 10, fontFamily: APP_FONTS.bold }}>$2 Commission</Text> */}
+                  
                     </View>
                   </View>
+                  </TouchableOpacity>
                   {/* <View style={{ borderBottomWidth: 1, top: 15, width: '100%', borderColor: '#ececec', right: 0 }} /> */}
 
                 </View>
@@ -327,35 +371,36 @@ class orders extends Component {
                     </View> */}
                     <View style={{ borderWidth: 0.7, borderColor: '#f0f0f0', top: 12 }} />
                     <View style={{ height: 30, flexDirection: 'row' }}>
-                      <Text style={{ top: 8, left: 16, fontFamily: APP_FONTS.semi_bold, fontSize: 13, top: 16, color: '#a8a8a8' }}>Order ID </Text>
-                      <Text style={{ top: 16, left: 16, fontFamily: APP_FONTS.semi_bold, fontSize: 13 }}>{item.orderId}</Text>
+                      <Text style={{ top: 8, left: 16, fontFamily: APP_FONTS.semi_bold, fontSize: 13, top: 28, color: '#a8a8a8' }}>Order ID </Text>
+                      <Text style={{ top: 28, left: 16, fontFamily: APP_FONTS.semi_bold, fontSize: 13 }}>{item.orderId}</Text>
                     </View>
                     <View style={{ padding: 30, top: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
 
                       {/* <View> */}
 
-                      <View style={{ flexDirection: 'row', backgroundColor: '#f7f7f7', width: '100%', height: hp('20%'),padding:10 }}>
+                      <View style={{ flexDirection: 'row', backgroundColor: '#f7f7f7', width: '100%', height: hp('17%'),padding:10 }}>
                         <View style={{ padding: 6 }}>
                           {/* <Text style={{ fontSize: 13, color: '#8f8f8f', fontFamily: APP_FONTS.semi_bold }}>{item.productId.productName}</Text> */}
-                          <Image source={{ uri: item.productId.images }} style={{ height: 90, width: 90 }} />
+                          <Image source={{ uri: item.productId == null?'': item.productId.images}} style={{ height: 90, width: 90 }} />
                         </View>
 
                         <View style={{ bottom: 0, height: 30, width: 130, borderRadius: 10, padding: 6, left: 0, top: 0 }}>
                           <View style={{ flexDirection: 'row', borderWidth: 1, borderRadius: 10, borderColor: '#eaeaea', justifyContent: 'center', height: 18 }}>
                             <Image source={APP_IMAGES.commisionImage} style={{ height: 14, width: 14, right: 5, top: 1 }} />
                             <View style={{flexDirection:'row'}}>
-                            <Text style={{ fontSize: 10, color: '#8f8f8f', fontFamily: APP_FONTS.semi_bold, right: 2 }}>{item.productId.commission}</Text>
+                            <Text style={{ fontSize: 10, color: '#8f8f8f', fontFamily: APP_FONTS.semi_bold, right: 2 }}>{item._id == null?'':item.commission}</Text>
                             <Text style={{ fontSize: 10, color: '#8f8f8f', fontFamily: APP_FONTS.semi_bold, right: 0 }}>Commission</Text>
                             </View>
                           </View>
-                          <Text style={{ fontSize: 13, color: '#f55bab', fontFamily: APP_FONTS.bold }}>${item.productId.price}</Text>
+                          <Text style={{ fontSize: 13, color: '#f55bab', fontFamily: APP_FONTS.bold }}>FCFA {item._id == null?'':item.orderTotal}</Text>
                           <View style={{ flexDirection: 'row' }}>
                             <Text style={{ fontSize: 13, color: '#8f8f8f', fontFamily: APP_FONTS.semi_bold, color: '#9a9a9a' }}>Items -</Text>
                             <Text style={{ fontSize: 13, color: '#8f8f8f', fontFamily: APP_FONTS.semi_bold, color: '#444444' }}>{item.quantity}</Text>
                           </View>
                           <View style={{ flexDirection: 'row' }}>
                             <Text style={{ fontSize: 13, color: '#8f8f8f', fontFamily: APP_FONTS.semi_bold, color: '#9a9a9a' }}>Date -</Text>
-                            <Text style={{ fontSize: 13, color: '#8f8f8f', fontFamily: APP_FONTS.semi_bold, color: '#444444' }}>{item.productId.updatedAt}</Text>
+                            {/* <Text style={{ fontSize: 13, color: '#8f8f8f', fontFamily: APP_FONTS.semi_bold, color: '#444444' }}>{item.productId == null?'':  new Date(item.productId.updatedAt).toLocaleString(undefined, {dateStyle: 'short'})}</Text> */}
+                            <Text style={{ fontSize: 13, color: '#8f8f8f', fontFamily: APP_FONTS.semi_bold, color: '#444444' }}>{item._id == null?'':  this.format(item.createdAt)}</Text>
                           </View>
                           <View style={{ flexDirection: 'row' }}>
                             <Text style={{ fontSize: 13, color: '#8f8f8f', fontFamily: APP_FONTS.semi_bold, color: '#9a9a9a' }}>Status -</Text>

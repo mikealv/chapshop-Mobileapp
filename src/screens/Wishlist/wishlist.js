@@ -641,8 +641,8 @@ class Active extends Component {
         this.setState({
             token: userS
         }, () => { this.state.token, 'token--->' })
-        // this.state.token?
-        // this.wishlist():null
+        this.state.token?
+        this.wishlist():null
         // await AsyncStorage.getItem('@user',JSON.stringify(user)).then(() => {
         //     console.log(user, 'fcmtokenLoginß')
 
@@ -674,6 +674,7 @@ class Active extends Component {
                     // if (data.response.status.statusCode === 200) {
                     if (data.status === 1) {
                          this.setState({
+                            wishData:data.wishlistData.wishList,
                             isLoading:false
                            
                         })

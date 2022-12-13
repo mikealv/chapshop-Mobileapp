@@ -105,7 +105,8 @@ export const APP_URLS = {
   verifyOtp : BASE_URL+'otp-verify',
   mainCategories : BASE_URL+'get-categories',
   // subCategories : BASE_URL+'get-sub-category',
-  productWithFilters: BASE_URL+'get-products-with-filter',
+  // productWithFilters: BASE_URL+'get-products-with-filter',//became APPLY SIDE FILTER ON 1 NOV 2022
+  productWithFilters: BASE_URL+'apply_side_filter',
   productWithSorts: BASE_URL+'/get-products-with-sort',
   subCategories : BASE_URL+'home',
   getProduct: BASE_URL+'get-product',
@@ -122,7 +123,8 @@ export const APP_URLS = {
   removeFromCart:BASE_URL+'delete-cart-product',
   orderSummary:BASE_URL+'order-summary',
   editAddress:BASE_URL+'edit-address',
-  placeOrder:BASE_URL+'place-order'
+  placeOrder:BASE_URL+'place-order',
+  getAllOrder:BASE_URL+'get-all-orders'
     // "category" : "6287363d87ec1cc126ebc33a"
 
 }

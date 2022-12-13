@@ -393,6 +393,7 @@ class productList extends Component {
             discount: "",
             ghany: [],
             paramName: '',
+            attributeSideFilterName: [],
             type: '',
             booleanColor: false,
             filterTopTypeData: '',
@@ -405,6 +406,14 @@ class productList extends Component {
             // types:this.props.route.params.type,
             productID: this.props.route.params.productID,
             categoryID: this.props.route.params.categoryID,
+            // attributeValueSideFilter: [],
+            // attributeValueSideFilter: '',14nov
+            attributeValueSideFilter: [],
+            colourValue: '',
+            sideDynamicFilterValue: [],
+            collapseValue: '',
+            topFilterSelectedValue: [],
+            subSubCategoryName: this.props.route.params.subSubCategoryName
 
 
         }
@@ -422,6 +431,7 @@ class productList extends Component {
         // ITEMSFILTER.map((item, i) => {
         this.state.filterData && this.state.filterData.length > 0 &&
             this.state.filterData && this.state.filterData.map((itemxxx, i) => {
+                // console.log(this.)
                 //      x = this.state.filterData
                 //         x.map((item, i) => {
                 showFilterOptionsArray.push(false)
@@ -771,7 +781,7 @@ class productList extends Component {
                             productName: data.products[0].productName,
                             isLoading: false
                         })
-                        console.log(this.state.product, 'prppopoopo')
+                        console.log(this.state.product, 'getProduct')
                         {
                             this.state.token ? this.wishlist() : null
                         }
@@ -841,15 +851,34 @@ class productList extends Component {
         })
     }
 
-    openSizeView(value, name, item) {
+    openSizeView(value, item) {
         console.log(item, 'IIID')
+        console.log(item.parameterName, 'IIIDPAPAPA')
         this.setState({
             isSizeOpen: !value,
-            paramName: name,
-            subparameterNAME: item.subParameter
+            // paramName: item.parameterName,//21oct
+            attributeSideFilterName: item.parameterName,
+            subparameterNAME: item.subParameter,
+            attributeValueSideFilter: [item.subParameter]
             // isOpen: value,
             // isTypeOpen: value
         })
+
+        // console.log(this.state.paramName, this.state.attributeValueSideFilter, 'popaPARA', value)
+
+        // const copy = [...this.state.sideDynamicFilterValue];
+
+        // let temp = {
+        //     attributeName: this.state.attributeSideFilterName,
+        //     attributeValue: value
+        // };
+
+        // copy.push(temp);
+        // this.setState({
+        //     sideDynamicFilterValue:copy
+        // },()=>{console.log(this.state.sideDynamicFilterValue,'DFV')})
+
+
     }
 
     async sorting(value) {
@@ -900,7 +929,7 @@ class productList extends Component {
                             productPrice: data.data[0].productPrice,
                             productName: data.data[0].productName
                         })
-                        console.log(this.state.product, 'prppopoopo')
+                        console.log(this.state.product, 'sortingGetProduct')
 
 
                     }
@@ -934,19 +963,39 @@ class productList extends Component {
     }
 
     showFilterOptions(index, Name) {
+        console.log(index, 'FOOROR', Name)
+        // console.console.log(());
         this.setState({
-            arrowUp: true
+            // arrowUp: true,
+            collapseValue: this.state.collapseValue == Name ? '' : Name
         })
+
         console.log(Name, '------------')
+        console.log(this.state.showFilterOptionsArray, 'OAOAOAOA')
         let showFilterOptionsArray = this.state.showFilterOptionsArray
+        // console.log(showFilterOptionsArray[index],'SHOWFILTER')
         showFilterOptionsArray[index] = !showFilterOptionsArray[index]
+        // showFilterOptionsArray[index] = 0
         this.setState({ showFilterOptionsArray })
+        // let  = [...this.state.paramName]
+        // let nonDynamicNameArray = ['size','color','type','gender','ratings',
+        // 'combo',
+        // 'printOrPatternType',
+        // 'price',
+        // 'discount']
+        // let temp = {}
         this.setState({
             paramName: Name
         }, () => { console.log(this.state.paramName, 'paramNAMME') })
-        // console.log(this.state.paramName,'paramNAMME')
-
     }
+    // else{
+    // this.setState(prev=>({
+    //     attributeSideFilterName:[...prev.attributeSideFilterName,Name]
+    // }),()=>{console.log(this.state.attributeSideFilterName,'ATTIBUTE')})
+    // }
+    // console.log(this.state.paramName,'paramNAMME')
+
+
 
     filterApplySet(value) {
         this.setState({
@@ -958,106 +1007,171 @@ class productList extends Component {
 
     }
 
-    async filterApply(item, sign) {
-        console.log(item, 'valuee-->')
-        this.setState({
-            isFilterOpen: false,
-            signTopFilter: sign
+    async filterApply(item, type) {
+        const copy = this.state.sideDynamicFilterValue
+        console.log(copy, 'COOOPY')
 
-        }, () => { console.log(this.state.signTopFilter, 'poaoa', item) })
-
-        let body = {
-            // fabric: value.name == "Fabric" ? value.name.options[0] : "",
-            fabric: this.state.fabric,
-            // fabric: this.state.fabri,
-            type: "TypesTopFilter" == this.state.signTopFilter ? item : this.state.type,
-            // type: this.state.type,
-            gender: "",
-            // gender: this.state.gender,
-            colour: this.state.colour,
-            // colour:"Red",
-            // size:this.state.size,
-            size: "TypeofSizeFilter" == this.state.signTopFilter ? item : this.state.size,
-            // catgeory: "",//categoryID
-            // catgeory: this.state.productID,//categoryID
-            // category:"631ee5f61a7caa52300ea911",//categoryID
-            category:this.state.categoryID,//categoryID
-            // size: this.state.size,
-            ratings: "",
-            combo: "",
-            printOrPatternType: "",
-            price: "",
-            discount: "",
-
-
-            //  gender: value == "Gender" ? value.options[0] : "",
-            // gender: value == "Gender" ? value.options[0] : "",
-            // colour: value == "Color" ? value.options[0] : "",
-            // size: value == "" ? "" : "",
-            // ratings: value == "" ? "" : "",
-            // combo: value == "" ? "" : "",
-            // printOrPatternType: value == "" ? "" : "",
-            // price: value == "Price" ? value.options[0] : "",
-            // discount: value == "" ? "" : "",
-            // category: value == "" ? "" : ""
-
-        }
-        console.log(body, 'bodyyyFilter')
-        try {
-            let response = await fetch(
-
-                APP_URLS.productWithFilters,
-                {
-                    'method': 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(body)
-                }
-            );
-            if (response.status == 200) {
-                console.log('normal----->')
-
-                response.json().then(data => {
-
-                    console.log('productfilter', JSON.stringify(data))
-                    //console.log('convoeys', JSON.stringify(data.usersChatData[0].message))
-                    // if (data.response.status.statusCode === 200) {
-                    if (data.status === 1) {
-                        // console.log(data.products[0], 'producttttss---')
-                        // console.log(data.products[0].images, 'producttttss')
-                        // console.log(data.products[0].productName, 'producttttss')
-                        this.setState({
-                            product: data.data.length > 0 ? data.data : [],
-                            productImages: data.data.length > 0 ? data.data[0].images : '',
-                            // productPrice: data.data[0].productPrice,
-                            productPrice: data.data.length > 0 ? data.data[0].price : '',
-                            productName: data.data.length > 0 ? data.data[0].productName : ''
-                        })
-                        console.log(this.state.product, 'prppopoopo')
-
-                    }
-
-                    else {
-                        this.setState({ isLoading: false }, () => {
-                        })
-                    }
-
-                });
-            } else {
-
-                this.setState({ isLoading: false }, () => {
-                    alert('Something went wrong error code: fdfdf' + response.status)
+        if (type) {
+            if (this.state.topFilterSelectedValue.includes(item)) {
+                this.clearFilter()
+                let temp = this.state.topFilterSelectedValue.filter((items) => items !== item);
+                this.setState({
+                    topFilterSelectedValue: temp
+                    
                 })
+                
+                
+            }
+            else {
+                this.setState({
+                    topFilterSelectedValue: [... this.state.topFilterSelectedValue, item]
+                }, () => { console.log(this.state.topFilterSelectedValue, 'TOOTOTO') })
             }
 
-        }
-        catch (error) {
+            let temp = {
+                attributeName: this.state.attributeSideFilterName,
+                attributeValue: item
+            };
+            copy.push(temp);
+            this.setState({
+                sideDynamicFilterValue: copy
+            }, () => { console.log(this.state.sideDynamicFilterValue, 'DFV') })
+        }//9nov
 
-            this.setState({ isLoading: false }, () => {
-                alert('Something went wrong error code: ' + error)
-            })
+        // copy.push(temp);
+        // this.setState({
+        //     sideDynamicFilterValue:copy
+        // },()=>{console.log(this.state.sideDynamicFilterValue,'DFV')}) //9NOV
+
+        console.log(item, 'CHECK', 'PARANAME', this.state.attributeSideFilterName)
+        console.log('KAKAKAK', this.state.sideDynamicFilterValue)
+
+        if (item && item == 'highToLow' || item && item == 'lowToHigh' || item && item == 'popularity' || item && item == 'rating') {
+            this.sorting(item)
+        }
+
+        else {
+
+            console.log(item, 'valuee-->')
+            this.setState({
+                isFilterOpen: false,
+                signTopFilter: type,
+                product: []
+
+            }, () => { console.log(this.state.signTopFilter, 'poaoa', item) })
+            let customSideKeyArray = ['size', 'gender', 'color', 'fabric', 'price']
+
+            let body = {
+                // category: this.state.categoryID,
+                category: this.state.productID,
+
+                // sideDynamicFilter:this.state.sideDynamicFilterValue, 
+                sideDynamicFilter: copy,
+                previousTopAttributeName: "",
+                previousTopAttributeValue: ""
+            }
+            let bodyCOPY = {
+                // fabric: value.name == "Fabric" ? value.name.options[0] : "",
+                fabric: this.state.fabric,
+                // fabric: this.state.fabri,
+                type: "TypesTopFilter" == this.state.signTopFilter ? item : this.state.type,
+                // type: this.state.type,
+                gender: "",
+                // gender: this.state.gender,
+                colour: this.state.colourValue,
+                // colour:"Red",
+                // size:this.state.size,
+                // size: "TypeofSizeFilter" == this.state.signTopFilter ? item : this.state.size,
+                // size: "TypeofSizeFilter" == this.state.signTopFilter ? item : this.state.size == 'size'? 'size':'',16oct/
+                size: this.state.signTopFilter == 'TypeofSizeFilter' ? item : this.state.paramName == 'size' ? this.state.attributeValueSideFilter : '',
+                // catgeory: "",//categoryID
+                // catgeory: this.state.productID,//categoryID
+                // category:"631ee5f61a7caa52300ea911",//categoryID
+                category: this.state.categoryID,//categoryID
+                // size: this.state.size,
+                ratings: "",
+                combo: "",
+                printOrPatternType: "",
+                price: "",
+                discount: "",
+                attributeName: this.state.signTopFilter == 'TypeofSizeFilter' ? '' : this.state.attributeSideFilterName,
+                // attributeValue:this.state.attributeValueSideFilter||[item]
+                // attributeValue: this.state.signTopFilter == 'TypeofSizeFilter' ?'' :this.state.paramName == 'size'?[]:this.state.attributeValueSideFilter||[item]
+                attributeValue: this.state.signTopFilter == 'TypeofSizeFilter' ? '' : this.state.paramName == 'size' ? [] : this.state.attributeValueSideFilter
+                // attributeValue:
+
+
+                //  gender: value == "Gender" ? value.options[0] : "",
+                // gender: value == "Gender" ? value.options[0] : "",
+                // colour: value == "Color" ? value.options[0] : "",
+                // size: value == "" ? "" : "",
+                // ratings: value == "" ? "" : "",
+                // combo: value == "" ? "" : "",
+                // printOrPatternType: value == "" ? "" : "",
+                // price: value == "Price" ? value.options[0] : "",
+                // discount: value == "" ? "" : "",
+                // category: value == "" ? "" : ""
+
+            }
+            console.log(body, 'bodyyyFilter')
+            try {
+                let response = await fetch(
+
+                    APP_URLS.productWithFilters,
+                    {
+                        'method': 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(body)
+                    }
+                );
+                if (response.status == 200) {
+                    console.log('normal----->')
+
+                    response.json().then(data => {
+
+                        console.log('productfilter', JSON.stringify(data))
+                        //console.log('convoeys', JSON.stringify(data.usersChatData[0].message))
+                        // if (data.response.status.statusCode === 200) {
+                        // if (data.status === 1) {/
+                        if (data.success == true) {
+
+                            // console.log(data.products[0], 'producttttss---')
+                            // console.log(data.products[0].images, 'producttttss')
+                            // console.log(data.products[0].productName, 'producttttss')
+                            this.setState({
+                                product: data.data.length > 0 ? data.data : [],
+                                productImages: data.data.length > 0 ? data.data[0].images : '',
+                                // productPrice: data.data[0].productPrice,
+                                productPrice: data.data.length > 0 ? data.data[0].price : '',
+                                productName: data.data.length > 0 ? data.data[0].productName : ''
+                            })
+                            console.log(this.state.product, 'filterApplyGetProduct')
+
+                        }
+
+                        else {
+                            this.setState({ isLoading: false }, () => {
+                            })
+                        }
+
+                    });
+                } else {
+
+                    this.setState({ isLoading: false }, () => {
+                        alert('Something went wrong error code: fdfdf' + response.status)
+                    })
+                }
+
+            }
+            catch (error) {
+
+                this.setState({ isLoading: false }, () => {
+                    alert('Something went wrong error code: ' + error)
+                })
+            }
         }
     }
 
@@ -1248,15 +1362,71 @@ class productList extends Component {
             gender: '',
             colour: '',
             size: '',
+            attributeName: '',
+            attributeValueSideFilter: [],
+            colourValue: '',
+            // paramName:'',
+            attributeSideFilterName: [],
+            sideDynamicFilterValue: [],
+            topFilterSelectedValue: []
         })
         // this.filterApply()
         this.getProduct()
     }
+    setColor(value) {
+
+
+
+        this.setState({
+            colourValue: value
+        })
+
+    }
 
     setyy(value) {
 
-        console.log(value, 'popa')
-        console.log(this.state.paramName, 'popaPARA', value)
+
+        console.log(value, 'VAVAVVAVVAVAV')
+        // if(this.state.paramName == 'color'){
+        //     this.setState({
+        //         colourValue:value
+        //     })
+        // }
+        // else{
+        // this.setState(prevState => ({
+        //     attributeValueSideFilter: [...prevState.attributeValueSideFilter, value]
+        // }), () => { console.log(this.state.attributeValueSideFilter, 'SIDEFILTER') })//2NOV
+        if (this.state.attributeValueSideFilter.includes(value)) {
+            this.clearFilter()
+            let temp = this.state.attributeValueSideFilter.filter((item) => item !== value);
+            this.setState({
+                attributeValueSideFilter: temp
+            })
+        }
+        else {
+            this.setState({
+                attributeValueSideFilter: [...this.state.attributeValueSideFilter, value]
+            }, () => { console.log(this.state.attributeValueSideFilter, 'FILTLLT') })
+        }
+        // }
+        // this.setState({
+        //     attributeValueSideFilter:value
+        //     //     type:value,        
+
+        // })
+        console.log(this.state.paramName, this.state.attributeValueSideFilter, 'popaPARA', value)
+
+        const copy = [...this.state.sideDynamicFilterValue];
+
+        let temp = {
+            attributeName: this.state.paramName,
+            attributeValue: value
+        };
+
+        copy.push(temp);
+        this.setState({
+            sideDynamicFilterValue: copy
+        }, () => { console.log(this.state.sideDynamicFilterValue, 'DFV') })
         // console.log(sign, 'SIGN')
 
         // if('Type' == this.state.paramName){
@@ -1267,19 +1437,19 @@ class productList extends Component {
 
         // }
 
-        this.setState({
-            fabric: this.state.paramName == 'Fabric' ? value : this.state.fabric,
-            type: 'Type' == this.state.paramName ? value : this.state.type,
-            colour: 'color' == this.state.paramName ? value : this.state.colour,
-            gender: 'gender' == this.state.paramName ? value : this.state.gender,
-            size: 'size' == this.state.paramName ? value : this.state.size,
-            Category: 'Category' == this.state.paramName ? value : this.state.category,
-            // ratings:'Type'== this.state.paramName ?value:this.state.type,
-            price: 'Price' == this.state.paramName ? value : this.state.price,
-            // fabric:this.state.paramName == 'fabric'?value:''
-            ghany: value,
-            booleanColor: true,
-        }, () => { console.log(this.state.type, 'valueeeeeS', this.state.fabric) })
+        // this.setState({ 21oct
+        //     fabric: this.state.paramName == 'Fabric' ? value : this.state.fabric,
+        //     type: 'Type' == this.state.paramName ? value : this.state.type,
+        //     colour: 'color' == this.state.paramName ? value : this.state.colour,
+        //     gender: 'gender' == this.state.paramName ? value : this.state.gender,
+        //     size: 'size' == this.state.paramName ? value : this.state.size,
+        //     Category: 'Category' == this.state.paramName ? value : this.state.category,
+        //     // ratings:'Type'== this.state.paramName ?value:this.state.type,
+        //     price: 'Price' == this.state.paramName ? value : this.state.price,
+        //     // fabric:this.state.paramName == 'fabric'?value:''
+        //     ghany: value,
+        //     booleanColor: true,
+        // }, () => { console.log(this.state.type, 'valueeeeeS', this.state.fabric) })
 
         //  if(this.state.signTopFilter == 'TypesTopFilter'){
         //      console.log('BAD')
@@ -1320,7 +1490,10 @@ class productList extends Component {
 
                             </View>
                         </TouchableOpacity>
-                        <Text style={{ left: 20, fontFamily: APP_FONTS.bold }}>TOPWEAR</Text>
+                        {/* <Text style={{ left: 20, fontFamily: APP_FONTS.bold }}>TOPWEAR</Text> */}
+                        <View style={{ width: '70%' }}>
+                            <Text ellipsizeMode='tail' numberOfLines={2} style={{ left: 20, fontFamily: APP_FONTS.bold }}>{this.state.subSubCategoryName}</Text>
+                        </View>
                     </View>
                     {/* <View> */}
                     <View style={{ flexDirection: 'row' }}>
@@ -1355,12 +1528,14 @@ class productList extends Component {
                     {/* </View> */}
                     {/* {dummyDynamic.map((item => {( */}
                     {this.state.nineteenSEP.length != 0 && this.state.nineteenSEP.map((item, index) => (
+
                         //    retu
 
 
                         <View style={{ flexDirection: 'row', width: wp('17%') }}>
 
-                            <TouchableOpacity style={{ flexDirection: 'row', left: 12, width: wp('17%') }} onPress={() => this.openSizeView(this.state.isSizeOpen, 'size', item)}>
+                            {/* <TouchableOpacity style={{ flexDirection: 'row', left: 12, width: wp('17%') }} onPress={() => this.openSizeView(this.state.isSizeOpen, 'size', item)}> 14OCT */}
+                            <TouchableOpacity style={{ flexDirection: 'row', left: 12, width: wp('17%') }} onPress={() => this.openSizeView(this.state.isSizeOpen, item)}>
                                 {/* <Text style={{ color: "#F43297", fontFamily: APP_FONTS.semi_bold, top: 5 }}>Size</Text> 19SEP */}
                                 <Text style={{ color: "#F43297", fontFamily: APP_FONTS.semi_bold, top: 5 }}>{item.parameterName}</Text>
                                 <Image source={APP_IMAGES.arrowDown} style={{ height: 12, width: 12, top: 10, left: 7 }} resizeMode="contain" />
@@ -1395,64 +1570,9 @@ class productList extends Component {
                         isTypeOpen: false
                     })
                 }}>
+
+
                     <View style={{ flex: 1, top: 0, backgroundColor: 'white' }}>
-                        {/* {
-
-                             this.state.isOpen == true && this.state.isSizeOpen == false && this.state.isTypeOpen == false ?
-
-
-
-                                <TouchableWithoutFeedback onPress={() => {
-                                    this.setState({
-                                        // isOpen: false
-                                        isOpen: false,
-                                        // isSizeOpen: false,
-                                        // isTypeOpen: false
-                                    })
-                                }}>
-                                    <View style={{ backgroundColor: 'white', height: 280, top: 0, }}>
-                                        <View style={{ height: 250, padding: 10 }}>
-
-                                            <FlatList
-                                                // horizontal
-                                                data={ITEMS}
-                                                style={{ flex: 1 }}
-                                                keyExtractor={item => item.id}
-                                                showsVerticalScrollIndicator={false}
-                                                showsHorizontalScrollIndicator={false}
-                                                renderItem={({ item, index, separator }) => {
-                                                    return (
-
-                                                        <View style={{ padding: 15 }}>
-
-                                                            <View style={{ backgroundColor: 'white', bottom: 0 }}>
-                                                                <TouchableOpacity onPress={() => { this.sorting(item.name) }
-                                                                } >
-                                                                    <Text style={{ fontSize: 12, color: '#8f8f8f', fontFamily: APP_FONTS.semi_bold }}>{item.name}</Text>
-                                                                </TouchableOpacity>
-                                                                <View style={{ flexDirection: 'row' }}>
-                                                                    {/* <Image source={APP_IMAGES.commisionImage} style={{ height: 14, width: 14 }} /> */}
-                        {/* <Text style={{ fontSize: 10, fontFamily: APP_FONTS.bold }}>$2 Commission</Text> */}
-                        {/* </View>
-                                                            </View>
-                                                            <View style={{ borderBottomWidth: 1, top: 15, width: '100%', borderColor: '#ececec', right: 0 }} />
-
-                                                        </View>
-
-                                                    )
-                                                }}
-                                            />
-
-                                        </View>
-
-                                    </View>
-                                </TouchableWithoutFeedback> */}
-
-                        {/* :
-
-                                <View style={{ backgroundColor: 'red' }}>
-                                </View>
-                        } */}
 
                         {
 
@@ -1473,6 +1593,7 @@ class productList extends Component {
                                                 // horizontal
                                                 // data={this.state.filterTopSizeData}
                                                 data={this.state.subparameterNAME}
+                                                // data={this.state.nineteenSEP}
                                                 // data={this.state.filterTopSizeData}//19sep
                                                 style={{ flex: 1 }}
                                                 keyExtractor={item => item.id}
@@ -1483,95 +1604,33 @@ class productList extends Component {
                                                     return (
 
                                                         <View style={{ padding: 15 }}>
-                                                            { item.parameterName == 'highToLow'||'lowToHigh'||'popularity'||'rating'? 
+                                                            {/* {item.parameterName == 'highToLow' || 'lowToHigh' || 'popularity' || 'rating' ? */}
+                                                            {/* {item == 'highToLow' || 'lowToHigh' || 'popularity' || 'rating' ?
 
+                                                                <View style={{ backgroundColor: 'white', bottom: 0 }}>
+
+                                                                     <TouchableOpacity onPress={() => { this.sorting(item) }}>
+
+                                                                        <Text style={{ fontSize: 12, color: '#8f8f8f', fontFamily: APP_FONTS.semi_bold }}>{item}</Text>
+                                                                    </TouchableOpacity>
+                                                                     <View style={{ flexDirection: 'row' }}>
+                                                                     </View>
+
+
+                                                                 </View>
+                                                                : */}
                                                             <View style={{ backgroundColor: 'white', bottom: 0 }}>
 
-                                                                {/* <View> */}
-                                                                 <TouchableOpacity onPress={() => { this.sorting(item) }}>
+                                                                <TouchableOpacity onPress={() => { this.filterApply(item, 'TopFilter') }}>
 
-                                                                 <Text style={{ fontSize: 12, color: '#8f8f8f', fontFamily: APP_FONTS.semi_bold }}>{item}</Text>
-                                                             </TouchableOpacity>
-                                                             {/* </View> */}
-                                                             <View style={{ flexDirection: 'row' }}>
-                                                                 {/* <Image source={APP_IMAGES.commisionImage} style={{ height: 14, width: 14 }} /> */}
-                                                                 {/* <Text style={{ fontSize: 10, fontFamily: APP_FONTS.bold }}>$2 Commission</Text> */}
-                                                             </View>
-
-                                                               
-                                                                {/* // } */}
-                                                            </View>
-                                                              :
-                                                              <View style={{ backgroundColor: 'white', bottom: 0 }}>
-
-                                                              <TouchableOpacity onPress={() => { this.filterApply(item, 'TypeofSizeFilter') }}>
-
-                                                                  <Text style={{ fontSize: 12, color: '#8f8f8f', fontFamily: APP_FONTS.semi_bold }}>{item}</Text>
-                                                              </TouchableOpacity>
-                                                              <View style={{ flexDirection: 'row' }}>
-                                                                  {/* <Image source={APP_IMAGES.commisionImage} style={{ height: 14, width: 14 }} /> */}
-                                                                  {/* <Text style={{ fontSize: 10, fontFamily: APP_FONTS.bold }}>$2 Commission</Text> */}
-                                                              </View>
-                                                              </View>
-                                                           }
-                                                            <View style={{ borderBottomWidth: 1, top: 15, width: '100%', borderColor: '#ececec', right: 0 }} />
-
-                                                        </View>
-
-                                                    )
-                                                }}
-                                            />
-
-                                        </View>
-
-                                    </View>
-                                </TouchableWithoutFeedback>
-
-                                :
-
-                                <View style={{ backgroundColor: 'red' }}>
-                                </View>
-                        }
-
-                        {
-
-                            // this.state.isTypeOpen == true ?
-                            this.state.isTypeOpen == true && this.state.isSizeOpen == false && this.state.isOpen == false ?
-
-
-                                <TouchableWithoutFeedback onPress={() => {
-                                    this.setState({
-                                        isTypeOpen: false,
-                                        // isSizeOpen: false,
-                                        // isTypeOpen: false
-                                    })
-                                }}>
-                                    <View style={{ backgroundColor: 'white', height: 280, top: 0, }}>
-                                        <View style={{ height: 250, padding: 10 }}>
-                                            <FlatList
-                                                // horizontal
-                                                data={this.state.filterTopTypeData}
-                                                style={{ flex: 1 }}
-                                                keyExtractor={item => item.id}
-                                                showsVerticalScrollIndicator={false}
-                                                showsHorizontalScrollIndicator={false}
-                                                renderItem={({ item, index, separator }) => {
-                                                    console.log('itemmmmm',item)
-                                                    return (
-
-                                                        <View style={{ padding: 15 }}>
-
-                                                            <View style={{ backgroundColor: 'white', bottom: 0 }}>
-                                                                {/* <TouchableOpacity onPress={() => { this.setyy(item,'TypesTopFilter')} */}
-                                                                <TouchableOpacity onPress={() => { this.filterApply(item, 'TypesTopFilter') }
-                                                                } >
-                                                                    <Text style={{ fontSize: 12, color: '#8f8f8f', fontFamily: APP_FONTS.semi_bold }}>{item}</Text>
+                                                                    <Text style={{ fontSize: 12, color: this.state.topFilterSelectedValue.includes(item) ? '#F43297' : '#8f8f8f', fontFamily: APP_FONTS.semi_bold }}>{item}</Text>
                                                                 </TouchableOpacity>
                                                                 <View style={{ flexDirection: 'row' }}>
                                                                     {/* <Image source={APP_IMAGES.commisionImage} style={{ height: 14, width: 14 }} /> */}
                                                                     {/* <Text style={{ fontSize: 10, fontFamily: APP_FONTS.bold }}>$2 Commission</Text> */}
                                                                 </View>
                                                             </View>
+                                                            {/* } */}
                                                             <View style={{ borderBottomWidth: 1, top: 15, width: '100%', borderColor: '#ececec', right: 0 }} />
 
                                                         </View>
@@ -1590,6 +1649,8 @@ class productList extends Component {
                                 <View style={{ backgroundColor: 'red' }}>
                                 </View>
                         }
+
+
 
                         <Modal
                             //    animationType="slide"
@@ -1666,6 +1727,7 @@ class productList extends Component {
 
                                         let showOptions = false
                                         if (this.state.showFilterOptionsArray[index]) showOptions = true
+                                        // console.log(this.state.showFilterOptionsArray[index],'jhdsjhs')
 
                                         return (
 
@@ -1677,16 +1739,24 @@ class productList extends Component {
                                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', flex: 1 }}>
                                                         {/* <TouchableOpacity onPress={()=>{selectedFilter(item.name)}}> */}
                                                         {/* <Text style={{ fontSize: 14, color: '#8f8f8f', fontFamily: APP_FONTS.semi_bold }}>{item.name}</Text> */}
-                                                        <View>
+                                                        <View style={{flexDirection:'row'}}>
                                                             <Text style={{ fontSize: 14, color: '#8f8f8f', fontFamily: APP_FONTS.semi_bold }}>{item.parameterName}</Text>
+                                                            <View style={{left:10}}>
+                                                            <Text style={{ fontSize: 14, color: '#F43297', fontFamily: APP_FONTS.semi_bold }}>{item.subParameter.filter((match) => this.state.attributeValueSideFilter.includes(match)).length ===
+                                                                0
+                                                                ? ""
+                                                                : item.subParameter.filter((match) => this.state.attributeValueSideFilter.includes(match)).length}</Text>
+                                                             </View>   
                                                         </View>
+                                                        
 
                                                         <TouchableOpacity onPress={() => this.showFilterOptions(index, item.parameterName)} style={{ alignSelf: 'flex-end', width: 30, height: 20 }}>
 
                                                             {/* this.state.arrowUp == false ?  */}
                                                             <View style={{ right: 10 }}>
                                                                 {
-                                                                    this.state.paramName == item.parameterName ?
+                                                                    // this.state.paramName == item.parameterName ?
+                                                                    this.state.collapseValue == item.parameterName ?
                                                                         <Image source={APP_IMAGES.arrowUp} style={{ height: 12, width: 12, left: 24 }} />
                                                                         :
                                                                         <Image source={APP_IMAGES.imageArrowDown} style={{ height: 12, width: 12, left: 20 }} />
@@ -1696,12 +1766,7 @@ class productList extends Component {
                                                             </View>
                                                         </TouchableOpacity>
 
-                                                        {/* :
-                                                            <Image source={APP_IMAGES.arrowLeft} style={{ height: 10, width: 10, left: 6 }} />
 
-                                                        }
-                                                     </TouchableOpacity> */}
-                                                        {/* </TouchableOpacity> */}
                                                     </View>
                                                     <View>
 
@@ -1711,12 +1776,16 @@ class productList extends Component {
                                                     </View>
 
                                                 </View>
-                                                {showOptions &&
+                                                {/* {showOptions && */}
+                                                {item?.parameterName == this.state.collapseValue &&
+
                                                     <View style={{ flexDirection: 'row', backgroundColor: 'white', flex: 1 }}>
                                                         {/* <TouchableOpacity onPress={()=>{this.filterApply(item.name[0].name)}}> */}
                                                         {/* <TouchableOpacity onPress={() => { this.filterApplySet(items) }}> */}
                                                         {/* <TouchableOpacity onPress={() => { this.filterApplySet(items) }}> */}
-                                                        {console.log(item.subParameter, 'SUBUBUBU')}
+                                                        {console.log(item, 'SUBUBUBU')}
+
+
                                                         <FlatList data={item.subParameter}
                                                             numColumns={2}
                                                             style={{ flex: 1, width: wp('100%') }}
@@ -1725,62 +1794,18 @@ class productList extends Component {
                                                                     <View style={{ padding: 3, top: 10 }}>
                                                                         <TouchableOpacity onPress={() => { this.setyy(item) }}>
                                                                             {/* <TouchableOpacity onPress={() => { this.filterApply(item) }}> */}
-                                                                            <View style={{ borderWidth: 1, paddingHorizontal: 10, borderRadius: 6, top: 0, borderColor: this.state.type == item || this.state.fabric == item || this.state.size == item || this.state.price == item || this.state.colour == item ? '#F43297' : '#ebebeb' }}>
+                                                                            <View style={{ borderWidth: 1, paddingHorizontal: 10, borderRadius: 6, top: 0, borderColor: this.state.type == item || this.state.fabric == item || this.state.size == item || this.state.price == item || this.state.colour == item || this.state.attributeValueSideFilter.includes(item) ? '#F43297' : '#ebebeb' }}>
 
-                                                                                <Text style={{ padding: 10, color: this.state.type == item ? "#F43297" : null, alignSelf: 'center' }}>{item}</Text>
+                                                                                <Text style={{ padding: 10, color: this.state.type == item || this.state.attributeValueSideFilter.includes(item) ? "#F43297" : null, alignSelf: 'center' }}>{item}</Text>
                                                                             </View>
                                                                         </TouchableOpacity>
                                                                     </View>
                                                                 )
                                                             }} keyExtractor={(item) => item} />
-                                                        {/* <FlatList
-                                                            // horizontal
-                                                            // data={ITEMSFILTER}
-                                                            // data={this.state.filterData}
-                                                            data={item.subParameter}
-                                                            style={{ color: 'red', height: 100, width: 100, borderWidth: 1 }}
-                                                            keyExtractor={itemss => itemss}
-                                                            showsHorizontalScrollIndicator={false}
-                                                            renderItem={({ itemss, index, separator }) => {
-                                                                return (
-
-                                                                    <View style={{ borderWidth: 1, borderColor: 'red' }}>
-                                                                        {/* <Text style={{ fontSize: 12, fontFamily: APP_FONTS.semi_bold, top: 20, padding: 0, color: this.state.colorTrue ? "#F43297" : 'red', }}>{items.item}</Text> */}
-                                                        {/* <Text style={{ padding: 0, fontSize: 12, color: 'red' }}>{index + 1}. {itemss}</Text>
-                                                                    </View>)
-                                                            }} /> */}
-                                                        {/* <View style={{ top: 10 }}> */}
-
-                                                        {/* <FlatList
-                                                                    // horizontal
-                                                                    // data={ITEMSFILTER}
-                                                                    // data={this.state.filterData}
-                                                                    data={item.subParameter}
-                                                                    style={{ flex: 1 }}
-                                                                    keyExtractor={item => item.id}
-                                                                    showsHorizontalScrollIndicator={false}
-                                                                    renderItem={({ item, index, separator }) => {
-                                                                        <Text style={{ fontSize: 12, fontFamily: APP_FONTS.semi_bold, top: 20, padding: 0, color: this.state.colorTrue ? "#F43297" : null, flexDirection: 'row' }}>{item}</Text>
-                                                                    }}/> */}
-                                                        {/* <ScrollView style={{flex:1}}> */}
-                                                        {/* <Text style={{ fontSize: 12, fontFamily: APP_FONTS.semi_bold, top: 10}}>{item.options[0]}</Text> */}
-                                                        {/* {// NEEERRAAJ CODE
-                                                                item.subParameter.length > 0 ?
-                                                                    item.subParameter.map((items, index) => (
-                                                                        <TouchableOpacity onPress={() => { this.handleFilter(items) }}>
-                                                                             <Text style={{ fontSize: 12, fontFamily: APP_FONTS.semi_bold, top: 20, padding: 0, color: this.state.colorTrue ? "#F43297" : null, flexDirection: 'row' }}>{items}</Text>
-                                                                         </TouchableOpacity>
-                                                                    ))
-                                                                    :
-                                                                    <Text style={{ fontSize: 12, fontFamily: APP_FONTS.semi_bold, top: 10 }}></Text>
-                                                           
-                                                            } // NEEERRAAJ CODE */}
-                                                        {/* </ScrollView> */}
 
 
-                                                        {/* </View> */}
-                                                        {/* </TouchableOpacity> */}
-                                                    </View>}
+                                                    </View>
+                                                }
 
                                                 <View style={{ borderBottomWidth: 1, top: 20, width: '120%', borderColor: '#ececec', right: 20 }} />
 
@@ -1826,7 +1851,7 @@ class productList extends Component {
                         </Modal>
 
 
-
+                        {console.log(this.state.product, 'PROKUSHG')}
                         <FlatList
                             // horizontal
                             // data={ProductList}

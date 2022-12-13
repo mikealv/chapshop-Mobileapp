@@ -715,7 +715,7 @@ class categories extends Component {
                         //     <Text>{item.color}</Text>
                         //   </View>
                         <View style={{ height: 120, width: wp('23.5%') }}>
-                            <TouchableOpacity onPress={() => { this.props.navigation.navigate('ProductList',{productID:item._id,categoryID:item.category._id}) }}>
+                            <TouchableOpacity onPress={() => { this.props.navigation.navigate('ProductList',{productID:item._id,categoryID:item.category._id,subSubCategoryName:item.subSubCategoryName}) }}>
                                 {/* <TouchableOpacity onPress={() => { this.props.navigation.navigate('Drawer') }}> */}
                                 <View style={{ padding: 10, right: 5 }}>
                                     <Image source={{uri:item.image}} style={{ height: 72, width: 72, alignSelf: 'center', bottom: 0, borderRadius: 36 }} />

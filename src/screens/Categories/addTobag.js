@@ -130,7 +130,10 @@ class addTobag extends Component {
             nearByLocation:'',
             stateS:'',
             city:'',
-            modalIndexID:''
+            modalIndexID:'',
+            totalCommission:'',
+            totalDiscount:''
+
         }
         
         this.props.navigation.addListener(
@@ -273,27 +276,30 @@ class addTobag extends Component {
 
                 APP_URLS.getShoppingBag,
                 {
-                    'method': 'POST',
+                    // 'method': 'POST',
+                    'method': 'GET',
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json',
                         'Authorization': this.state.token == null ? '' : "Bearer" + " " + this.state.token.split('"').join(''),
 
                     },
-                    body: body
+                    // body: body
                 }
             );
             if (response.status == 200) {
 
 
                 response.json().then(data => {
-                    console.log(data.products, 'fdaatat')
+                    console.log(data, 'fdaatat')
 
                     // if (data.response.status.statusCode === 200) {
                     if (data.status == 1) {
                         this.setState({
                             shoppingBag: data.products,
-                            totalPrice: data.totalPrice
+                            totalPrice: data.totalPrice,
+                            totalCommission:data.totalCommission,
+                            totalDiscount:data.totalDiscount
                         })
                         console.log(this.state.shoppingBag, 'shoppingBAG')
                         this.getOrderSummary()
@@ -1291,7 +1297,7 @@ class addTobag extends Component {
                                                                     shadowRadius: Platform.OS == 'ios' ? 10 : 10,
                                                                     elevation: Platform.OS == 'ios' ? 0 : 10,
                                                                 }}>
-                                                                    <Image source={{ uri: item.productId.images }} style={{ height: 160, width: 120, borderTopLeftRadius: 4, borderTopRightRadius: 4, borderBottomLeftRadius: 4, borderBottomRightRadius: 4 }} />
+                                                                    <Image source={{ uri: item?.productId?.images  }} style={{ height: 160, width: 120, borderTopLeftRadius: 4, borderTopRightRadius: 4, borderBottomLeftRadius: 4, borderBottomRightRadius: 4 }} />
                                                                 </View>
 
                                                             </View>
@@ -1299,12 +1305,12 @@ class addTobag extends Component {
                                                                 <View style={{ borderColor: '#f2f2f2', width: '60%', flexDirection: 'row', borderWidth: 1, left: 4, borderRadius: 10 }}>
                                                                     <Image source={APP_IMAGES.discountDollar} style={{ height: 14, width: 14, left: 2 }} />
                                                                     <Text style={{ color: '#bcbcbc', fontSize: 9, fontFamily: APP_FONTS.bold, left: 5 }}>Commission:</Text>
-                                                                    <Text style={{ color: '#bcbcbc', fontSize: 9, fontFamily: APP_FONTS.bold, left: 5 }}> {item.productId.commission} FCFA</Text>
+                                                                    <Text style={{ color: '#bcbcbc', fontSize: 9, fontFamily: APP_FONTS.bold, left: 5 }}> {item?.productId?.commission} FCFA</Text>
                                                                 </View>
                                                                 <View style={{ top: 10, width: Platform.OS == 'ios' ? wp('50%') : wp('55%') }}>
-                                                                    <Text ellipsizeMode='tail' numberOfLines={1} style={{ left: 10, top: 0, color: 'black', fontFamily: APP_FONTS.bold, fontSize: 12, flexWrap: 'wrap' }}>{item.productId.productName}</Text>
+                                                                    <Text ellipsizeMode='tail' numberOfLines={1} style={{ left: 10, top: 0, color: 'black', fontFamily: APP_FONTS.bold, fontSize: 12, flexWrap: 'wrap' }}>{item?.productId?.productName}</Text>
                                                                 </View>
-                                                                <Text style={{ color: '#f53d9c', fontSize: 12, fontFamily: APP_FONTS.bold, top: 15, left: 10 }}>FCFA {item.productId.price}</Text>
+                                                                <Text style={{ color: '#f53d9c', fontSize: 12, fontFamily: APP_FONTS.bold, top: 15, left: 10 }}>FCFA {item?.productId?.price}</Text>
 
 
                                                                 <View style={{ flexDirection: 'row', padding: 10, top: 40, paddingHorizontal: 40 }}>
@@ -1533,10 +1539,10 @@ class addTobag extends Component {
                                                     <View style={{ margin: 4, padding: 20, justifyContent: 'space-between', flexDirection: 'row', left: 0, backgroundColor: '#f0f0f0', borderRadius: 4, height: hp('8%'), width: wp('90%'), flex: 1 }}>
                                                         <View style={{ flex: 0.7, height: Platform.OS == 'ios' ? hp('4%') : hp('6%'), bottom: 10 }}>
                                                             {/* <Text style={{ color: '#b1b1b1', fontFamily: APP_FONTS.bold,bottom:30}}>{item.productId.productName}</Text> */}
-                                                            <Text ellipsizeMode='tail' numberOfLines={1} style={{ color: '#b1b1b1', fontFamily: APP_FONTS.bold, top: 8, flexWrap: 'wrap' }}>{item.productId.productName}</Text>
+                                                            <Text ellipsizeMode='tail' numberOfLines={1} style={{ color: '#b1b1b1', fontFamily: APP_FONTS.bold, top: 8, flexWrap: 'wrap' }}>{item?.productId?.productName}</Text>
                                                         </View>
                                                         <View style={{ flex: 0.3, bottom: Platform.OS == 'ios' ? 3 : 10, height: hp('6%') }}>
-                                                            <Text style={{ color: '#b1b1b1', fontFamily: APP_FONTS.bold, alignSelf: 'flex-end' }}>FCFA {item.productId.commission}</Text>
+                                                            <Text style={{ color: '#b1b1b1', fontFamily: APP_FONTS.bold, alignSelf: 'flex-end' }}>FCFA {item?.productId?.commission}</Text>
                                                         </View>
                                                     </View>
 
@@ -1551,7 +1557,7 @@ class addTobag extends Component {
 
                                     <View style={{ left: 9, bottom: 6 }}>
                                         <Text style={{ fontFamily: APP_FONTS.semi_bold, fontSize: 12, color: '#5e5e5e', top: 6 }}>Commission Total</Text>
-                                        <Text style={{ top: 8, color: '#5e5e5e', fontFamily: APP_FONTS.semi_bold, fontSize: 12 }}>FCFA 20.00</Text>
+                                        <Text style={{ top: 8, color: '#5e5e5e', fontFamily: APP_FONTS.semi_bold, fontSize: 12 }}>FCFA {this.state.totalCommission}</Text>
                                         <Text style={{ top: 12, fontSize: 10, fontFamily: APP_FONTS.semi_bold }}>This amount will be transferred to your mobile money number</Text>
                                     </View>
                                 </View>
@@ -1565,7 +1571,7 @@ class addTobag extends Component {
                                 <View style={{ padding: 20, right: 8 }}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', bottom: 20 }}>
                                         <Text>Product Charges</Text>
-                                        <Text>FCFA 20.00</Text>
+                                        <Text>FCFA {this.state.totalPrice}</Text>
                                     </View>
                                     {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', bottom: 10 }}>
                                         <Text>Delivery Charges</Text>
@@ -1573,7 +1579,7 @@ class addTobag extends Component {
                                     </View> */}
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <Text>Discount</Text>
-                                        <Text>FCFA 20.00</Text>
+                                        <Text>FCFA {this.state.totalDiscount}</Text>
                                     </View>
                                 </View>
                             </View>

@@ -90,6 +90,7 @@ class paymentSummary extends Component {
             modalSizeID: '',
             bagPage: true,
             showSummaryPage: false,
+            // showSummaryPage: true,
             shoppingBagCartData: this.props.route.params.dataSend,
             totalPrice: this.props.route.params.priceTotal,
             shoppingCartData: this.props.route.params.dataSend,
@@ -98,7 +99,18 @@ class paymentSummary extends Component {
             city: this.props.route.params.addressCity,
             area: this.props.route.params.addressArea,
             mobileNumber: this.props.route.params.mobileNo,
-            modalIndexID:''
+            modalIndexID: '',
+            address: '',
+            checkTrue: false,
+            selectedName: '',
+            selectedCity: '',
+            selectedHouse: '',
+            selectedArea: '',
+            selectedPhoneNo: '',
+            clickOnDeliveryAddress: false,
+            totalCommission:'',
+            totalDiscount:''
+
         }
     }
 
@@ -116,6 +128,7 @@ class paymentSummary extends Component {
         }, () => { this.state.token, 'token--->' })
         console.log(this.state.token, 'oojojtkt')
         this.getShoppingBag()
+        this.editAccount()
 
 
 
@@ -127,12 +140,12 @@ class paymentSummary extends Component {
         // })
     }
 
-    modalViewSize(valueID,iD) {
+    modalViewSize(valueID, iD) {
         // alert('rohan')
         this.setState({
             modalViewSizeBottom: true,
             modalSizeID: valueID,
-            modalIndexID:iD
+            modalIndexID: iD
 
 
 
@@ -180,6 +193,87 @@ class paymentSummary extends Component {
 
                     }
 
+                    else {
+                        this.setState({ isLoading: false }, () => {
+                        })
+                    }
+
+                });
+            } else {
+
+                this.setState({ isLoading: false }, () => {
+                    alert('Something went wrong error code: fdfdf' + response.status)
+                })
+            }
+
+        }
+        catch (error) {
+
+            this.setState({ isLoading: false }, () => {
+                alert('Something went wrong error code: ' + error)
+            })
+        }
+    }
+
+    async editAccount() {
+        console.log('AKAKAK')
+        let body = {
+            fullName: "",
+            gender: "",
+            dateOfBirth: "",
+            image: ""
+        }
+        console.log('shomoshahaah')
+        try {
+            let response = await fetch(
+
+                APP_URLS.editAccount,
+                {
+                    'method': 'PUT',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': this.state.token == null ? '' : "Bearer" + " " + this.state.token.split('"').join(''),
+                    },
+                    body: JSON.stringify(body)
+                    // body: createFormData(body)
+                }
+            );
+            if (response.status == 200) {
+                console.log('normal----->')
+
+                response.json().then(data => {
+
+                    console.log('ADDEEEs', JSON.stringify(data))
+                    //console.log('convoeys', JSON.stringify(data.usersChatData[0].message))
+                    // if (data.response.status.statusCode === 200) {
+                    if (data.status === 1) {
+
+                        // alert(data.user.Address)
+                        this.setState({
+                            address: data.user.Address
+                        })
+                        // console.log(data.category, 'catteetete')
+                        // this.setState({
+                        //     mainCategory: data.category
+                        // }, () => { this.state.mainCategory, 'mainCategoriiiess' })
+                        // let token = data.response.userData.accessToken
+                        // let user = data.response.userData
+                        // userToken = token
+                        // AsyncStorage.setItem('@user', JSON.stringify(user)).then(() => {
+                        //     this.props.navigation.navigate('DrawerScreen')
+                        //     this.setState({
+                        //         isLoading:false
+                        //     })
+                        // })
+                        //     this.props.navigation.navigate('Otp',{otpOutput:this.state.otpRecieved,
+                        //         phoneNumber: this.state.phone,
+                        //         countryCode: this.state.countryCode})
+                        //     // alert('hahaah')
+                    }
+                    // else if (data.status === 0) {
+                    //     alert(data.message)
+                    // }
                     else {
                         this.setState({ isLoading: false }, () => {
                         })
@@ -319,14 +413,14 @@ class paymentSummary extends Component {
 
                 APP_URLS.getShoppingBag,
                 {
-                    'method': 'POST',
+                    'method': 'GET',
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json',
                         'Authorization': "Bearer" + " " + this.state.token.split('"').join(''),
 
                     },
-                    body: body
+                    // body: body
                 }
             );
             if (response.status == 200) {
@@ -339,7 +433,9 @@ class paymentSummary extends Component {
                     if (data.status == 1) {
                         this.setState({
                             shoppingBag: data.products,
-                            totalPrice: data.totalPrice
+                            totalPrice: data.totalPrice,
+                            totalDiscount:data.totalDiscount,
+                            totalCommission:data.totalCommission
                         })
                         this.getOrderSummary()
 
@@ -426,16 +522,42 @@ class paymentSummary extends Component {
         }, () => { console.log(changedSizeValue, 'changeSIZE') })
     }
 
-   async placeOrder(productID,quantity){
-        let body = {
-            // {
-                productId:productID,
-                orderStatus: "Order_Placed",
-                quantity: quantity,
-                paymentMode: "Cash on Delivery"
-            // }
-        }
-        console.log(body,'BOBOBDY')
+    async placeOrder(productID, quantity) {
+        console.log(productID, 'PRODUUUU', quantity)
+        let body = [];
+        this.state.shoppingBag.forEach((item) => {
+            //    let sizeL = item
+
+            console.log(item, 'BABITEM'),
+                body.push({
+                    productId: item.productId._id,
+
+                    orderStatus: "Order_Placed",
+                    // quantity: quantity,
+                    paymentMode: "Cash on Delivery",
+                    size: item.size,
+                    quantity: item.quantity,
+                    name: this.state.clickOnDeliveryAddress == true? this.state.selectedName:this.state.nameAdress,
+                    phoneNumber:this.state.clickOnDeliveryAddress == true ? this.state.selectedPhoneNo : this.state.mobileNumber,
+                    // houseNo: this.state.clickOnDeliveryAddress == true ? this.state.selectedHouse : this.state.houseNumber,
+                    houseNo: this.state.clickOnDeliveryAddress == true ? 'HOUSE no2':'house No3',
+                    area: this.state.clickOnDeliveryAddress == true? this.state.selectedArea :this.state.area,
+                    pinCode: this.state.clickOnDeliveryAddress == true?'121211':'121121' ,
+                    city: this.state.clickOnDeliveryAddress == true?this.state.selectedCity:this.state.city,
+                    state: 'Rubigi',
+                    nearByLocation: ''
+                })
+        });
+
+        // let body = {
+        //     // {
+        //         productId:productID,
+        //         orderStatus: "Order_Placed",
+        //         quantity: quantity,
+        //         paymentMode: "Cash on Delivery"
+        //     // }
+        // }
+        console.log(body, 'BOBOBDY')
         try {
             let response = await fetch(
 
@@ -456,13 +578,13 @@ class paymentSummary extends Component {
 
                 response.json().then(data => {
 
-                    // console.log('wishdaata+++', JSON.stringify(data))
+                    console.log('placedDATA', JSON.stringify(data))
                     //console.log('convoeys', JSON.stringify(data.usersChatData[0].message))
                     // if (data.response.status.statusCode === 200) {
-                    if (data.status === 1) {
+                    if (data.success == true) {
                         this.props.navigation.navigate('PlaceOrderPage')
                     }
-                  
+
                     else {
                         this.setState({ isLoading: false }, () => {
                         })
@@ -483,6 +605,30 @@ class paymentSummary extends Component {
                 alert('Something went wrong error code: ' + error)
             })
         }
+    }
+
+    clickToCheck(nameInAddress, house, city, area, phoneNo) {
+        this.setState({
+            checkTrue: true,
+            selectedName: nameInAddress,
+            selectedPhoneNo: phoneNo,
+            selectedArea: area,
+            selectedCity: city,
+            selectedHouse: house,
+             
+        })
+    }
+
+    seTdeliveryAddress() {
+        this.setState({
+            clickOnDeliveryAddress: true,
+            selectedName: this.state.selectedName,
+            selectedPhoneNo: this.state.selectedPhoneNo,
+            selectedArea: this.state.selectedArea,
+            selectedCity: this.state.selectedCity,
+            selectedHouse: this.state.selectedHouse
+        })
+
     }
 
 
@@ -668,7 +814,7 @@ class paymentSummary extends Component {
                                                                     <Text style={{ color: 'black', fontFamily: APP_FONTS.medium, fontSize: 12 }}>{item.productId.productName}</Text>
                                                                     {/* <Text style={{ color: 'black', fontFamily: APP_FONTS.medium, fontSize: 12 }}>https://www.google.com/search?q=gif+for+react+native+page&rlz=1C5CHFA_enIN963IN963</Text> */}
                                                                 </View>
-                                                                <View style={{ height: 20, top: 26, right: Platform.OS == 'ios' ? 250 : 260, width: wp('100%')}}>
+                                                                <View style={{ height: 20, top: 26, right: Platform.OS == 'ios' ? 250 : 260, width: wp('100%') }}>
                                                                     <Text style={{ color: 'black', fontSize: 12, fontFamily: APP_FONTS.bold }}> FCFA {item.productId.mrp}</Text>
                                                                     {/* <Text style={{ color: 'black', fontSize: 12, fontFamily: APP_FONTS.bold }}> FCFA 12000</Text> */}
                                                                 </View>
@@ -677,7 +823,7 @@ class paymentSummary extends Component {
                                                                 <View style={{ flexDirection: 'row', left: 5 }}>
                                                                     <Text style={{ fontSize: 12, fontFamily: APP_FONTS.medium, top: 4 }}>Size</Text>
                                                                     {/* <TouchableOpacity onPress={() => { this.modalViewSize(item.productId._id) }}> */}
-                                                                    <TouchableOpacity onPress={() => { this.modalViewSize(item.productId._id,item._id) }}>
+                                                                    <TouchableOpacity onPress={() => { this.modalViewSize(item.productId._id, item._id) }}>
                                                                         <View style={{ backgroundColor: '#f0f0f0', flexDirection: 'row', left: 7, padding: 7, bottom: 3, borderRadius: 4 }}>
                                                                             {console.log(item.size, 'ssuuuze')}
                                                                             {console.log(item.newSize, 'newSize')}
@@ -692,7 +838,7 @@ class paymentSummary extends Component {
                                                                         flexDirection: 'row', height: '76%', width: 1.5, top: 3, left: 15,
                                                                         backgroundColor: '#909090'
                                                                     }} />
-                                                                    <View style={{ flexDirection: 'row', left:30 , top: 20 }}>
+                                                                    <View style={{ flexDirection: 'row', left: 30, top: 20 }}>
                                                                         <Text style={{ fontSize: 12, fontFamily: APP_FONTS.medium, bottom: 16, right: 10 }}>Qty</Text>
                                                                         <TouchableOpacity style={{ bottom: 15, right: 7, height: 20, width: Platform.OS == 'ios' ? 18 : 24 }} onPress={() => { this.editCartProduct(item.productId._id, "-", item.quantity, item._id, item.size) }}>
                                                                             <View style={{}}>
@@ -829,19 +975,19 @@ class paymentSummary extends Component {
                                                                 )
                                                             }}
                                                         />
-                                                         <View style={{ bottom: 10 }}>
-                                                    <View style={{ flexDirection: 'row', alignSelf: 'center', top: 0, width: wp('80%'), height: 46, backgroundColor: '#F43297', borderRadius: 8, justifyContent: 'center' }}>
-                                                        {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('PaymentSummary', { dataSend: this.state.shoppingBag, priceTotal: this.state.totalPrice, addressName: this.state.name, addressHouseNo: this.state.houseNo, addressCity: this.state.city, addressArea: this.state.area, mobileNo: this.state.phoneNumber })}> */}
-                                                        <TouchableOpacity onPress={() => {
-                                                            this.setState({
-                                                                modalViewSizeBottom: false
+                                                        <View style={{ bottom: 10 }}>
+                                                            <View style={{ flexDirection: 'row', alignSelf: 'center', top: 0, width: wp('80%'), height: 46, backgroundColor: '#F43297', borderRadius: 8, justifyContent: 'center' }}>
+                                                                {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('PaymentSummary', { dataSend: this.state.shoppingBag, priceTotal: this.state.totalPrice, addressName: this.state.name, addressHouseNo: this.state.houseNo, addressCity: this.state.city, addressArea: this.state.area, mobileNo: this.state.phoneNumber })}> */}
+                                                                <TouchableOpacity onPress={() => {
+                                                                    this.setState({
+                                                                        modalViewSizeBottom: false
 
-                                                            })
-                                                        }}>
-                                                            <Text style={{ alignSelf: 'center', top: 12, color: '#ffffff', fontFamily: APP_FONTS.bold, left: 0 }}>Done</Text>
-                                                        </TouchableOpacity>
-                                                    </View>
-                                                </View>
+                                                                    })
+                                                                }}>
+                                                                    <Text style={{ alignSelf: 'center', top: 12, color: '#ffffff', fontFamily: APP_FONTS.bold, left: 0 }}>Done</Text>
+                                                                </TouchableOpacity>
+                                                            </View>
+                                                        </View>
                                                     </View>
                                                 </View>
 
@@ -876,7 +1022,7 @@ class paymentSummary extends Component {
                                                 //  top:100
 
                                             }}>
-                                                <View style={{ backgroundColor: '#FFFFFF', width: '100%', borderTopLeftRadius: 10, borderTopRightRadius: 10, paddingHorizontal: 10, height: 320 }}>
+                                                <View style={{ backgroundColor: '#FFFFFF', width: '100%', borderTopLeftRadius: 10, borderTopRightRadius: 10, paddingHorizontal: 10, height: 400 }}>
 
                                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
                                                         <Text style={{ fontSize: 14, color: '#8c8c8c', fontFamily: APP_FONTS.bold }}>DELIVERY ADDRESS</Text>
@@ -895,27 +1041,74 @@ class paymentSummary extends Component {
                                                         </View>
                                                     </TouchableOpacity>
 
-                                                    <View style={{ paddingHorizontal: 20, marginTop: 20, flex: 1, backgroundColor: '#f8f8f8', bottom: 10 }}>
+                                                    <View style={{ paddingHorizontal: 0, marginTop: 20, flex: 1, bottom: 10 }}>
+                                                        {/* <View style={{  flex:1, backgroundColor: '#f8f8f8', bottom: 0 }}> */}
 
-                                                        <View style={{ height: hp('15%'), top: 10 }}>
+                                                        <FlatList
+                                                            data={this.state.address}
+                                                            style={{ flex: 1 }}
+                                                            keyExtractor={item => item.id}
+                                                            showsHorizontalScrollIndicator={false}
+                                                            renderItem={({ item, index, separator }) => {
+                                                                return (
+                                                                    // {console.log(item, 'itemmADDRESS')}
+                                                                    // <ScrollView style={{flex:1,bottom:0,borderWidth:1,borderColor:'red',height:'100%'}}>
+                                                                    < View style={{ top: 4, left: 0, backgroundColor: this.state.selectedName == item.contactDetails.name ? '#e7edff' : '#f8f8f8', }}>
+                                                                        <TouchableOpacity onPress={() => { this.clickToCheck(item.contactDetails.name, item.address.houseNo, item.address.city, item.address.area, item.contactDetails.phoneNumber) }}>
+                                                                            <View style={{}}>
+                                                                                {/* <View style={{backgroundColor:'green',borderWidth:1}}> */}
+                                                                                <Text style={{ fontSize: 12, fontFamily: APP_FONTS.bold, color: 'black', left: 50, top: 5 }}>{item.contactDetails.name}</Text>
+                                                                                {/* </View> */}
 
-                                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                                                <Text style={{ fontSize: 12, fontFamily: APP_FONTS.bold, color: 'black', left: 10, top: 20 }}>{this.state.nameAdress}</Text>
-
-                                                                {/* {
+                                                                                {/* {
                                                                     item.address.houseNo == this.state.houseNumber ? */}
-                                                                <Image source={APP_IMAGES.check} style={{ height: 16, width: 16, top: 25, right: 10 }} />
-                                                                {/* : */}
-                                                                {/* <Image source={APP_IMAGES.uncheck} style={{ height: 16, width: 16, top: 18, right: 10 }} /> */}
-                                                                {/* } */}
-                                                            </View>
-                                                            <Text style={{ fontSize: 12, fontFamily: APP_FONTS.semi_bold, color: '#acacac', left: 10, top: 25 }}>{this.state.houseNumber} {this.state.city}  {this.state.area} </Text>
-                                                            {/* <Text style={{ fontSize: 12, fontFamily: APP_FONTS.semi_bold, color: '#acacac', left: 10, top: 25 }}>H3 SAS NAGAR 101</Text> */}
-                                                            {/* <Text style={{ fontSize: 12 }}>{"address": {"area": "Ok", "city": "110033", "houseNo": "Hhh", "nearByLocation": "Sector2", "pinCode": 110033, "state": "Punjab"},}</Text> */}
-                                                            <Text style={{ fontSize: 12, fontFamily: APP_FONTS.bold, color: 'black', left: 10, top: 40 }}>Mobile: {this.state.mobileNumber}</Text>
+                                                                                {/* <TouchableOpacity onPress={() => { this.clickToCheck() }}> */}
+                                                                                <Image source={this.state.selectedHouse == item.address.houseNo ? APP_IMAGES.check : APP_IMAGES.uncheck} style={{ height: 16, width: 16, top: 10, left: 10 }} />
+                                                                                {/* </TouchableOpacity> */}
+                                                                                {/* : */}
+                                                                                {/* <Image source={APP_IMAGES.uncheck} style={{ height: 16, width: 16, top: 18, right: 10 }} /> */}
+                                                                                {/* } */}
+                                                                            </View>
+                                                                        </TouchableOpacity>
+                                                                        <Text style={{ fontSize: 12, fontFamily: APP_FONTS.semi_bold, color: '#acacac', left: 50, top: 0 }}>{item.address.houseNo} {item.address.city}  {item.address.area} </Text>
+                                                                        {/* <Text style={{ fontSize: 12, fontFamily: APP_FONTS.semi_bold, color: '#acacac', left: 10, top: 25 }}>H3 SAS NAGAR 101</Text> */}
+                                                                        {/* <Text style={{ fontSize: 12 }}>{"address": {"area": "Ok", "city": "110033", "houseNo": "Hhh", "nearByLocation": "Sector2", "pinCode": 110033, "state": "Punjab"},}</Text> */}
+                                                                        <Text style={{ fontSize: 12, fontFamily: APP_FONTS.bold, color: 'black', left: 50, top: 5 }}>Mobile: {item.contactDetails.phoneNumber}</Text>
 
-                                                        </View>
-                                                        <TouchableOpacity onPress={() => {
+                                                                        <TouchableOpacity onPress={() => {
+                                                                            this.props.navigation.navigate('AddNewAddress', {
+                                                                                type: 'update',
+                                                                                nameAddress: item.contactDetails.name,
+                                                                                houseNo: item.address.houseNo,
+                                                                                city: item.address.city,
+                                                                                area: item.address.area,
+                                                                                mobNo: item.contactDetails.phoneNumber
+
+                                                                            })
+                                                                        }}>
+                                                                            <View style={{ padding: 10, left: 38 }}>
+                                                                                <Text style={{ color: '#fc7192', fontSize: 12, fontFamily: APP_FONTS.bold }}>EDIT</Text>
+                                                                            </View>
+                                                                        </TouchableOpacity>
+                                                                        {this.state.selectedHouse == item.address.houseNo ?
+                                                                            <View style={{ bottom: 10 }}>
+                                                                                <TouchableOpacity onPress={() => { this.seTdeliveryAddress() }}>
+                                                                                    <View style={{ flexDirection: 'row', width: '90%', height: 46, backgroundColor: '#F43297', borderRadius: 8, alignSelf: 'center', justifyContent: 'center' }}>
+                                                                                        <Text style={{ fontFamily: APP_FONTS.bold, color: 'white', alignSelf: 'center' }}>Deliver to this Address </Text>
+                                                                                    </View>
+                                                                                </TouchableOpacity>
+                                                                            </View>
+                                                                            :
+                                                                            null
+                                                                        }
+
+                                                                    </View>
+                                                                    //  </ScrollView>
+                                                                )
+                                                            }}
+                                                        />
+
+                                                        {/* <TouchableOpacity onPress={() => {
                                                             this.props.navigation.navigate('AddNewAddress', {
                                                                 type: 'update',
                                                                 nameAddress: this.state.nameAdress,
@@ -929,7 +1122,7 @@ class paymentSummary extends Component {
                                                             <View style={{ padding: 10 }}>
                                                                 <Text style={{ color: '#fc7192', fontSize: 12, fontFamily: APP_FONTS.bold }}>EDIT</Text>
                                                             </View>
-                                                        </TouchableOpacity>
+                                                        </TouchableOpacity> */}
 
                                                         {/* <FlatList
                                                             horizontal
@@ -952,11 +1145,7 @@ class paymentSummary extends Component {
                                                             }}
                                                         /> */}
                                                     </View>
-                                                    <View style={{ backgroundColor: '#f8f8f8', bottom: 10 }}>
-                                                        <View style={{ flexDirection: 'row', width: '90%', height: 46, backgroundColor: '#F43297', borderRadius: 8, alignSelf: 'center', justifyContent: 'center' }}>
-                                                            <Text style={{ fontFamily: APP_FONTS.bold, color: 'white', alignSelf: 'center' }}>Deliver to this Address </Text>
-                                                        </View>
-                                                    </View>
+
                                                 </View>
 
 
@@ -972,23 +1161,28 @@ class paymentSummary extends Component {
                                     {/* <View style={{ height: hp('15%'), top: 10 }}> */}
 
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'white', top: 0, flex: 0.10 }}>
-                                        <Text style={{ fontSize: 12, fontFamily: APP_FONTS.bold, color: 'black', left: 10, top: 30 }}>{this.state.nameAdress}</Text>
+                                        <Text style={{ fontSize: 12, fontFamily: APP_FONTS.bold, color: 'black', left: 10, top: 30 }}>{this.state.clickOnDeliveryAddress == true ? this.state.selectedName : this.state.nameAdress}</Text>
 
 
                                         {/* <Image source={APP_IMAGES.arrowRight} style={{ height: 10, width: 10, alignSelf: 'center', right: 10 }} /> */}
 
                                     </View>
+                                    {/* <TouchableOpacity onPress={() =>{this.openAddressBox()}}> */}
                                     <View style={{ flex: 0.20, top: 40 }}>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                            <Text style={{ fontSize: 12, fontFamily: APP_FONTS.semi_bold, color: '#acacac', left: 10, top: 0 }}>{this.state.houseNumber} {this.state.city}  {this.state.area} </Text>
-                                            <TouchableOpacity onPress={() => { this.openAddressBox(this.state.houseNumber, this.state.city, this.state.area, this.state.mobileNumber, this.state.nameAdress) }}>
+                                        <TouchableOpacity style={{}} onPress={() => { this.openAddressBox() }}>
+                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                                <Text style={{ fontSize: 12, fontFamily: APP_FONTS.semi_bold, color: '#acacac', left: 10, top: 0 }}>{this.state.clickOnDeliveryAddress == true ? this.state.selectedHouse : this.state.houseNumber} {this.state.clickOnDeliveryAddress == true ? this.state.selectedCity:this.state.city}  {this.state.clickOnDeliveryAddress == true ?  this.state.selectedArea:this.state.area} </Text>
+                                                {/* <TouchableOpacity onPress={() => { this.openAddressBox(this.state.houseNumber, this.state.city, this.state.area, this.state.mobileNumber, this.state.nameAdress) }}> */}
+                                                {/* <TouchableOpacity onPress={() => { this.openAddressBox() }}> */}
                                                 <Image source={APP_IMAGES.rightArrow} style={{ height: 10, width: 10, top: 5, right: 12 }} />
-                                            </TouchableOpacity>
-                                        </View>
 
-                                        {/* <Text style={{ fontSize: 12 }}>{"address": {"area": "Ok", "city": "110033", "houseNo": "Hhh", "nearByLocation": "Sector2", "pinCode": 110033, "state": "Punjab"},}</Text> */}
-                                        <Text style={{ fontSize: 12, fontFamily: APP_FONTS.bold, color: 'black', left: 10, top: 30 }}>Mobile: {this.state.mobileNumber}</Text>
+                                            </View>
+
+                                            {/* <Text style={{ fontSize: 12 }}>{"address": {"area": "Ok", "city": "110033", "houseNo": "Hhh", "nearByLocation": "Sector2", "pinCode": 110033, "state": "Punjab"},}</Text> */}
+                                            <Text style={{ fontSize: 12, fontFamily: APP_FONTS.bold, color: 'black', left: 10, top: 30 }}>Mobile: {this.state.clickOnDeliveryAddress == true ? this.state.selectedPhoneNo : this.state.mobileNumber}</Text>
+                                        </TouchableOpacity>
                                     </View>
+                                    {/* </TouchableOpacity> */}
 
                                 </View>
 
@@ -1008,6 +1202,48 @@ class paymentSummary extends Component {
                                     </View>
 
                                 </View>
+                                <View style={{ flex: 0.10 }}>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 20 }}>
+                                    <Text style={{ fontFamily: APP_FONTS.bold, fontSize: 14, color: 'black' }}>Commission</Text>
+                                    {/* <Text style={{ fontFamily: APP_FONTS.bold, fontSize: 14, color: 'black' }}>$20.00</Text> */}
+                                </View>
+                                <View style={{ padding: 10 }}>
+                                    <FlatList
+                                        data={this.state.shoppingBag}
+                                        style={{ flex: 1, bottom: 10 }}
+                                        keyExtractor={item => item.id}
+                                        showsHorizontalScrollIndicator={false}
+                                        renderItem={({ item, index, separator }) => {
+                                            console.log('COMMOMOO', item)
+                                            return (
+                                                <View style={{ flex: 1 }}>
+                                                    <View style={{ margin: 4, padding: 20, justifyContent: 'space-between', flexDirection: 'row', left: 0, backgroundColor: '#f0f0f0', borderRadius: 4, height: hp('8%'), width: wp('90%'), flex: 1 }}>
+                                                        <View style={{ flex: 0.7, height: Platform.OS == 'ios' ? hp('4%') : hp('6%'), bottom: 10 }}>
+                                                            {/* <Text style={{ color: '#b1b1b1', fontFamily: APP_FONTS.bold,bottom:30}}>{item.productId.productName}</Text> */}
+                                                            <Text ellipsizeMode='tail' numberOfLines={1} style={{ color: '#b1b1b1', fontFamily: APP_FONTS.bold, top: 8, flexWrap: 'wrap' }}>{item?.productId?.productName}</Text>
+                                                        </View>
+                                                        <View style={{ flex: 0.3, bottom: Platform.OS == 'ios' ? 3 : 10, height: hp('6%') }}>
+                                                            <Text style={{ color: '#b1b1b1', fontFamily: APP_FONTS.bold, alignSelf: 'flex-end' }}>FCFA {item?.productId?.commission}</Text>
+                                                        </View>
+                                                    </View>
+
+
+
+                                                </View>
+                                            )
+                                        }}
+
+
+                                    />
+
+                                    <View style={{ left: 9, bottom: 6 }}>
+                                        <Text style={{ fontFamily: APP_FONTS.semi_bold, fontSize: 12, color: '#5e5e5e', top: 6 }}>Commission Total</Text>
+                                        <Text style={{ top: 8, color: '#5e5e5e', fontFamily: APP_FONTS.semi_bold, fontSize: 12 }}>FCFA {this.state.totalCommission}</Text>
+                                        <Text style={{ top: 12, fontSize: 10, fontFamily: APP_FONTS.semi_bold }}>This amount will be transferred to your mobile money number</Text>
+                                    </View>
+                                </View>
+                                </View>
+ 
 
 
 
@@ -1018,15 +1254,15 @@ class paymentSummary extends Component {
                                     <View style={{ padding: 20 }}>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', bottom: 20 }}>
                                             <Text>Product Charges</Text>
-                                            <Text>$20.00</Text>
+                                            <Text>FCFA {this.state.totalPrice}</Text>
                                         </View>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', bottom: 10 }}>
                                             <Text>Delivery Charges</Text>
-                                            <Text>$20.00</Text>
+                                            <Text>FCFA </Text>
                                         </View>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                             <Text>Discount</Text>
-                                            <Text>$20.00</Text>
+                                            <Text>FCFA {this.state.totalDiscount}</Text>
                                         </View>
                                     </View>
                                 </View>
@@ -1059,10 +1295,10 @@ class paymentSummary extends Component {
                                 </View>
                                 <View style={{ flex: 0.10, backgroundColor: '#fffff', top: 20 }}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 20 }}>
-                                        <Text style={{ fontFamily: APP_FONTS.bold, fontSize: 14, color: 'black' }}>Commission</Text>
+                                        {/* <Text style={{ fontFamily: APP_FONTS.bold, fontSize: 14, color: 'black' }}>Commission</Text> */}
                                         {/* <Text style={{ fontFamily: APP_FONTS.bold, fontSize: 14, color: 'black' }}>$20.00</Text> */}
                                     </View>
-                                    <View style={{ padding: 10 }}>
+                                    {/* <View style={{ padding: 10 }}>
                                         <FlatList
                                             data={this.state.shoppingBag}
                                             style={{ flex: 1, bottom: 10 }}
@@ -1075,7 +1311,7 @@ class paymentSummary extends Component {
                                                         <View style={{ margin: 4, padding: 20, justifyContent: 'space-between', flexDirection: 'row', left: 0, backgroundColor: '#f0f0f0', borderRadius: 4, height: hp('8%'), width: wp('90%'), flex: 1 }}>
                                                             <View style={{ flex: 0.7, height: Platform.OS == 'ios' ? hp('4%') : hp('6%'), bottom: 10 }}>
                                                                 {/* <Text style={{ color: '#b1b1b1', fontFamily: APP_FONTS.bold,bottom:30}}>{item.productId.productName}</Text> */}
-                                                                <Text ellipsizeMode='tail' numberOfLines={1} style={{ color: '#b1b1b1', fontFamily: APP_FONTS.bold, top: 8, flexWrap: 'wrap' }}>{item.productId.productName}</Text>
+                                    {/* <Text ellipsizeMode='tail' numberOfLines={1} style={{ color: '#b1b1b1', fontFamily: APP_FONTS.bold, top: 8, flexWrap: 'wrap' }}>{item.productId.productName}</Text>
                                                             </View>
                                                             <View style={{ flex: 0.3, bottom: Platform.OS == 'ios' ? 3 : 10, height: hp('6%') }}>
                                                                 <Text style={{ color: '#b1b1b1', fontFamily: APP_FONTS.bold, alignSelf: 'flex-end' }}>FCFA {item.productId.commission}</Text>
@@ -1086,11 +1322,11 @@ class paymentSummary extends Component {
 
                                                     </View>
                                                 )
-                                            }}
+                                            }} */}
 
 
-                                        />
-                                    </View>
+                                    {/* /> */}
+                                    {/* </View> */}
                                 </View>
 
                                 <View style={{ backgroundColor: 'white', flex: 0.40, top: 20 }}>
@@ -1100,19 +1336,19 @@ class paymentSummary extends Component {
                                     <View style={{ padding: 20 }}>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', bottom: 20 }}>
                                             <Text>Product Charges</Text>
-                                            <Text>$20.00</Text>
+                                            <Text>FCFA {this.state.totalPrice}</Text>
                                         </View>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', bottom: 10 }}>
                                             <Text>Delivery Charges</Text>
-                                            <Text>$20.00</Text>
+                                            <Text>FCFA </Text>
                                         </View>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                             <Text>Discount</Text>
-                                            <Text>$20.00</Text>
+                                            <Text>FCFA {this.state.totalDiscount}</Text>
                                         </View>
                                     </View>
                                 </View>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10, borderColor: '#ededed', borderWidth: 1.5 }}>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10, borderColor: '#ededed', borderWidth: 1.5, top: 10 }}>
                                     <Text style={{ fontFamily: APP_FONTS.bold, fontSize: 14, color: 'black' }}>Order Total</Text>
                                     <Text style={{ fontFamily: APP_FONTS.bold, fontSize: 14, color: 'black' }}>FCFA {this.state.totalPrice}</Text>
                                 </View>
@@ -1132,7 +1368,8 @@ class paymentSummary extends Component {
                         {
                             this.state.showSummaryPage == true ?
                                 // <TouchableOpacity onPress={() => this.props.navigation.navigate('PlaceOrderPage')}>
-                                <TouchableOpacity onPress={() => this.placeOrder(this.state.shoppingBag[0].productId._id,this.state.shoppingBag[0].quantity)}>
+                                // <TouchableOpacity onPress={() => this.placeOrder(this.state.shoppingBag[0].productId._id,this.state.shoppingBag[0].quantity)}>
+                                <TouchableOpacity onPress={() => this.placeOrder()}>
                                     <View style={{}}>
                                         <Text style={{ fontFamily: APP_FONTS.bold, color: 'white', alignSelf: 'center', left: 30, top: 10 }}>Place Order</Text>
 
@@ -1163,7 +1400,7 @@ class paymentSummary extends Component {
 
 
 
-            </SafeAreaView>
+            </SafeAreaView >
         )
     }
 
